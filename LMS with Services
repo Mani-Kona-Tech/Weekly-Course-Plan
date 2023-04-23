@@ -1,0 +1,104 @@
+# Azure Services to Build LMS Application
+
+Azure Static Web App for FrontEnd
+
+Create a Static Web App in Azure Portal
+
+  - Login to Azure Portal
+  - Click on Create a Resource
+  - Search for Static Web App
+  - Click on Create
+  - Crete a Resource Group - LMSAppDemo
+  - Enter a Name - LMSStaticWebApp
+  - Select a Region - Default
+
+
+Azure Database for PostgreSQL Flexible Server
+
+  - Login to Azure Portal
+  - Click on Create a Resource
+  - Search for Azure Database for PostgreSQL Flexible Server
+  - Click on Create
+  - Select a Resource Group - LMSAppDemo
+  - Enter a Name - lmspgdb
+  - Select a Region - Default
+  - Select a Server Version - Default
+  - Select a Pricing Tier - Default
+  - Select a Compute + Storage - Default
+  - Admin Username dbuser
+  - Admin Password - LMSApp!23
+  - got to next page -networking
+  - Select  Allow public access from any Azure service within Azure to this server
+  - Review and Create
+
+Azure Container Registry 
+
+- Login to Azure Portal
+  - Click on Create a Resource
+  - Search for Container Registry
+  - Click on Create
+  - Select a Resource Group - LMSAppDemo
+  - Enter a Name - lmsacr
+  - Select a Region - Default
+  - Select a SKU - Basic
+  - Review and Create
+
+Enable Admin User in ACR
+  - Login to Azure Portal
+  - Click on Resource Group - LMSAppDemo
+  - Click on Container Registry - lmsacr
+  - click Udpdate
+  - Enable Admin User
+
+
+
+Create a Azure DevOps Pipleline for build & Publish Docker Image to Azure Container Registry 
+
+  - Login to Azure DevOps
+  - Create a Project
+  - Create a Repository
+  - Make sure to udpate Defalut branch to vm-ci-cd-docker
+  - Create a Pipeline
+  - Select a Repository - LMS with Services
+  - Select a Starter Pipeline - Docker Build and Push
+  - Select the subscription - LMSAppDemo
+  - Select the Container Registry - lmsacr
+  - Select the Image Name - lmspublicapi
+  - Update tag in the pipeline from $(Build.BuildId)to tag: 'latest'
+  - Save and Run
+
+
+Create a  Web App in Azure Portal
+  - Login to Azure Portal
+  - Click on Create a Resource
+  - Search for Web App
+  - Click on Create
+  - Select a Resource Group - LMSAppDemo
+  - Enter a Name - lmspublicapi
+  - Select a Region - Default
+  - Select a Publish - Docker Container
+  - Select a Operating System - Linux
+  - next page - Configuration
+  - Options single container
+  - Image Source Azure Container Registry
+  - Registry - lmsacr
+  - Image and Tag - lmspublicapi:latest
+  - Review & Create
+
+
+Setup Database Connection String in Web App
+
+  - Login to Azure Portal
+  - Click on Resource Group - LMSAppDemo
+  - Click on Web App - lmspublicapi
+  - Click on Configuration
+  - Click on New Application Setting
+  - Enter a Value - DATABASE_URL=postgres://dbuser:NewMani12345@llmspgdb.postgres.database.azure.com/postgres
+  - Click on New Application Setting
+  - Enter a Value - MODE=production
+  - Click on Save
+
+
+Make sure Frontend is communicating with  Backend
+
+Update .env with Backend URL
