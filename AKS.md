@@ -2,7 +2,6 @@
 
 **Lesson Duration**: 1 week (5 sessions)
 
-
 **Lesson Objectives**:
 1. Understand the fundamentals of Kubernetes and container orchestration.
 2. Learn about Azure Kubernetes Service (AKS) and its features.
@@ -81,3 +80,46 @@
    - Pod security policies
    - Review key concepts and best practices
    - Address any questions and concerns
+
+
+### How to Setup  AKS  Cluster for LMS application 
+
+   - Create ACR
+   - Create AKS
+   - Create a VM
+   - Install Docker 
+   - Post Install Steps
+   - Install Kubectl
+      sudo snap install kubectl --classic
+   - Setup Code form GITHUB or Azure Repos
+      git clone https://github.com/digitaledify/lms-public.git
+      cd lms-public
+      git checkout features/lms-aks-ingress-tls
+   - Build FrontEnd Image with Docker
+      cd webapp
+      docker build -t lms-public-frontend .
+   - Build BackEnd Image with Docker
+      cd ../api
+      docker build -t lms-public-backend .
+   - install Azure Cli
+      sudo apt install azure-cli
+   - Login to Azure Cli - Azure Login
+      az login
+   - connect to AKS Cluster
+      Get details from AKS Cluster 
+      click on connect button
+      copy the command and run in the terminal
+   - Connect to ACR and Push Images
+      az acr login --name lmsacrreg
+      Tag Docker images
+      docker tag lms-public-frontend lmsacrreg.azurecr.io/lms-public-frontend
+      docker tag lms-public-backend lmsacrreg.azurecr.io/lms-public-backend
+      Push Docker images to ACR
+      docker push lmsacrreg.azurecr.io/lms-public-frontend
+      docker push lmsacrreg.azurecr.io/lms-public-backend
+
+   - use kubectl to deploy the application in AKS
+      kubectl apply -f kubernetes/
+   - Get the Public IP of the Load Balancer
+      kubectl get svc
+   - Access the application using the Public IP
