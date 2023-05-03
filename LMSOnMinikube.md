@@ -1,6 +1,6 @@
 # Setup LMS on Minikube
 
-Login in to Azure Portal
+Login in to Azure Portal - New Version 
 Create Azure VM
   - install Docker
     https://docs.docker.com/engine/install/ubuntu/
